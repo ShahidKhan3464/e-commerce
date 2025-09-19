@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from '../utils/sendMail.js';
 import { findUserByEmail, createUser } from '../repositories/user.js';
@@ -8,6 +6,13 @@ import {
   welcomeTemplate,
   resetPasswordTemplate
 } from '../emailTemplates/index.js';
+import {
+  compareToken,
+  resetTokenHash,
+  comparePassword,
+  encryptPassword,
+  generateResetToken
+} from '../utils/general.js';
 
 export const userRegister = async (user, res) => {
   const { name, email, password } = user;
@@ -17,7 +22,7 @@ export const userRegister = async (user, res) => {
     return errorResponse(res, 'User already exists.', 409);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await encryptPassword(password);
   const newUser = await createUser({
     name,
     email,
@@ -35,7 +40,8 @@ export const userLogin = async (user, res) => {
     return errorResponse(res, 'Invalid credentials', 400);
   }
 
-  const isMatch = await bcrypt.compare(password, login_user.password);
+  const isMatch = await comparePassword(password, login_user.password);
+
   if (!isMatch) {
     return errorResponse(res, 'Invalid credentials', 400);
   }
@@ -62,14 +68,14 @@ export const forgotPassword = async (user, res) => {
     return errorResponse(res, 'User not found.', 404);
   }
 
-  const resetToken = crypto.randomBytes(32).toString('hex');
-  const resetTokenHash = await bcrypt.hash(resetToken, 10);
+  const token = generateResetToken();
+  const hashedToken = await resetTokenHash(token);
 
-  existUser.resetPasswordToken = resetTokenHash;
+  existUser.resetPasswordToken = hashedToken;
   existUser.resetPasswordExpires = Date.now() + 3600000; // 1 hour expiry
   await existUser.save();
 
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}&email=${email}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
   const html = resetPasswordTemplate(resetUrl);
 
   await sendEmail(email, 'Password Reset Request', html);
@@ -88,16 +94,13 @@ export const resetPassword = async (user, res) => {
     return errorResponse(res, 'User not found.', 404);
   }
 
-  const isTokenValid = await bcrypt.compare(
-    token,
-    existUser.resetPasswordToken
-  );
+  const isTokenValid = await compareToken(token, existUser.resetPasswordToken);
 
   if (!isTokenValid || existUser.resetPasswordExpires < Date.now()) {
     return errorResponse(res, 'Invalid or expired reset token', 400);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await encryptPassword(password);
 
   // Update user password and clear reset token
   existUser.password = hashedPassword;

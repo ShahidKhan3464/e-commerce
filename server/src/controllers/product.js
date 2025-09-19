@@ -47,8 +47,7 @@ export const updateProductHandler = async (req, res) => {
 
     if (req.file) {
       updateData = {
-        title: req.body.title,
-        price: req.body.price,
+        ...req.body,
         image: `/uploads/${req.file.filename}`
       };
     } else {

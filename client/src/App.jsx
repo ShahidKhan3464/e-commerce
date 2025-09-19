@@ -1,28 +1,28 @@
 import { Routes, Route } from 'react-router-dom';
-import AdminRoute from './routes/admin';
 import Layout from './components/Layout';
 import PublicRoute from './routes/public';
-import ProtectedRoute from './routes/protected';
+import RoleRoute from './routes/role-route';
 
 // Public pages
-import HomePage from './pages/home/home';
+import HomePage from './pages/home';
 import LoginPage from './pages/auth/login';
 import RegisterPage from './pages/auth/register';
 import ResetPasswordPage from './pages/auth/resetPassword';
 import ForgotPasswordPage from './pages/auth/forgotPassword';
 
 // User pages
-import OrdersPage from './pages/users/orders';
 import ProfilePage from './pages/users/profile';
+import OrdersPage from './pages/users/orders/list';
+import ProductForm from './pages/admin/products/form';
+import ProductsPage from './pages/users/products/list';
 import UserDashboardPage from './pages/users/dashboard';
-import ProductsPage from './pages/users/products/products';
-import ProductDetailPage from './pages/users/products/productDetail';
+// import ProductDetailPage from './pages/users/products/productDetail';
 
 // Admin pages
-import AdminUsersPage from './pages/admin/users';
-import AdminOrdersPage from './pages/admin/orders';
-import AdminProductsPage from './pages/admin/products';
+import AdminUsersPage from './pages/admin/users/list';
+import AdminOrdersPage from './pages/admin/orders/list';
 import AdminDashboardPage from './pages/admin/dashboard';
+import AdminProductsPage from './pages/admin/products/list';
 
 export default function App() {
   return (
@@ -37,26 +37,58 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         </Route>
       </Route>
+      <Route element={<Layout />}>
+        <Route
+          path="/dashboard"
+          element={
+            <RoleRoute
+              adminComponent={<AdminDashboardPage />}
+              customerComponent={<UserDashboardPage />}
+            />
+          }
+        />
 
-      {/* Protected user routes */}
-      <Route element={<ProtectedRoute />}>
-        <Route element={<Layout />}>
-          <Route path="/dashboard" element={<UserDashboardPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/product/:id" element={<ProductDetailPage />} />
-        </Route>
-      </Route>
+        <Route
+          path="/orders"
+          element={
+            <RoleRoute
+              customerComponent={<OrdersPage />}
+              adminComponent={<AdminOrdersPage />}
+            />
+          }
+        />
 
-      {/* Admin routes */}
-      <Route element={<AdminRoute />}>
-        <Route element={<Layout />}>
-          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-          <Route path="/admin/users" element={<AdminUsersPage />} />
-          <Route path="/admin/orders" element={<AdminOrdersPage />} />
-          <Route path="/admin/products" element={<AdminProductsPage />} />
-        </Route>
+        <Route
+          path="/products"
+          element={
+            <RoleRoute
+              customerComponent={<ProductsPage />}
+              adminComponent={<AdminProductsPage />}
+            />
+          }
+        />
+
+        <Route
+          path="/products/create"
+          element={<RoleRoute adminOnly adminComponent={<ProductForm />} />}
+        />
+
+        <Route
+          path="/products/edit/:id"
+          element={<RoleRoute adminOnly adminComponent={<ProductForm />} />}
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <RoleRoute customerOnly customerComponent={<ProfilePage />} />
+          }
+        />
+
+        <Route
+          path="/users"
+          element={<RoleRoute adminOnly adminComponent={<AdminUsersPage />} />}
+        />
       </Route>
 
       {/* Fallback */}

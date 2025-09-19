@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 const limiter = rateLimit({
-  max: 10,
+  max: 20,
   windowMs: 60 * 1000,
   legacyHeaders: false,
   standardHeaders: true,
