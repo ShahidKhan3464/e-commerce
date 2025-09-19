@@ -38,19 +38,20 @@ export const getProductByIdService = async (id, user, res) => {
 
 // Get all products with filters, pagination, sorting
 export const getAllProductsService = async (filters = {}, user, res) => {
-  const page = parseInt(filters.page, 10) || 1;
-  const limit = parseInt(filters.limit, 10) || 4;
+  const page = parseInt(filters.page, 5) || 1;
+  const limit = parseInt(filters.limit, 5) || 5;
   const search = filters.search ? String(filters.search).trim() : '';
   const skip = (page - 1) * limit;
 
   const filterOptions = {
-    userId: user._id,
+    skip,
+    limit,
     search,
+    userId: user._id,
+    sortBy: filters.sortBy,
     minPrice: filters.minPrice,
     maxPrice: filters.maxPrice,
-    sortBy: filters.sortBy,
-    skip,
-    limit
+    category: filters.category
   };
 
   const total = await countProducts(filterOptions);

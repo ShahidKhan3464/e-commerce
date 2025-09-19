@@ -11,20 +11,20 @@ import {
 export default function Sidebar() {
   const { user } = useAuthStore();
 
-  const userLinks = [
+  const links = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
-    { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
-    { name: 'Profile', path: '/profile', icon: <FaUser /> }
+    ...(user?.role === 'admin'
+      ? [
+          { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
+          { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
+          { name: 'Users', path: '/users', icon: <FaUsers /> }
+        ]
+      : [
+          { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
+          { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
+          { name: 'Profile', path: '/profile', icon: <FaUser /> }
+        ])
   ];
-
-  const adminLinks = [
-    { name: 'Dashboard', path: '/admin/dashboard', icon: <FaTachometerAlt /> },
-    { name: 'Orders', path: '/admin/orders', icon: <FaShoppingCart /> },
-    { name: 'Products', path: '/admin/products', icon: <FaBoxOpen /> },
-    { name: 'Users', path: '/admin/users', icon: <FaUsers /> }
-  ];
-
-  const links = user?.role === 'admin' ? adminLinks : userLinks;
 
   return (
     <aside className="w-64 bg-gray-800 text-white flex flex-col shadow-lg">
@@ -41,9 +41,9 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 flex flex-col px-2 py-4 space-y-1">
-        {links.map((link) => (
+        {links.map((link, index) => (
           <NavLink
-            key={link.path}
+            key={index}
             to={link.path}
             className={({ isActive }) =>
               `flex items-center px-4 py-3 rounded-lg text-gray-200 hover:bg-gray-700 hover:text-white transition ${

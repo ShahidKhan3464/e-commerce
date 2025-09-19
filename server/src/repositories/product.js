@@ -1,10 +1,14 @@
 import Product from '../models/product.js';
 
-const buildFilter = ({ userId, search, minPrice, maxPrice }) => {
+const buildFilter = ({ userId, search, category, minPrice, maxPrice }) => {
   const filter = { user: userId };
 
+  if (category) {
+    filter.category = { $regex: `^${category}$`, $options: 'i' };
+  }
+
   if (search) {
-    filter.$or = [{ title: { $regex: search.trim(), $options: 'i' } }];
+    filter.$or = [{ name: { $regex: search.trim(), $options: 'i' } }];
   }
 
   if (minPrice !== undefined || maxPrice !== undefined) {
