@@ -1,0 +1,60 @@
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import useAuthStore from '@/store/auth';
+import Input from '@/components/ui/input';
+import Button from '@/components/ui/button';
+
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  const { forgotPassword, loading } = useAuthStore();
+
+  const submit = async (e) => {
+    e.preventDefault();
+    try {
+      await forgotPassword({ email });
+      setSent(true);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Failed to send reset email');
+    }
+  };
+
+  return (
+    <div className="min-h-[calc(100vh_-_132px)] flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+        {/* Title */}
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-900">Forgot Password</h2>
+          <p className="text-gray-600 mt-2">
+            Enter your email and we’ll send you instructions to reset your
+            password.
+          </p>
+        </div>
+
+        {sent ? (
+          <div className="bg-green-50 text-green-700 p-4 rounded-lg text-center font-medium">
+            ✅ Check your email for reset instructions.
+          </div>
+        ) : (
+          <form onSubmit={submit} className="space-y-5">
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              label="Email"
+              type="email"
+              placeholder="you@domain.com"
+            />
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 text-white py-2.5 rounded-lg shadow hover:bg-blue-700 transition"
+            >
+              {loading ? 'Loading...' : 'Send Reset Email'}
+            </Button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+body {
+  margin: 0;
+  padding: 0;
+  @apply bg-gray-100 text-gray-800;
+}
+
+.container {
+  @apply max-w-6xl mx-auto px-4;
+}
