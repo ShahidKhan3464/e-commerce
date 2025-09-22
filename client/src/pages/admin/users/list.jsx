@@ -1,59 +1,106 @@
 import React, { useEffect, useState } from 'react';
+import { FaEye } from 'react-icons/fa';
+import useUserStore from '@/store/user';
+import { FiTrash } from 'react-icons/fi';
 import Table from '@/components/ui/table';
-import adminService from '@/services/admin';
+import Input from '@/components/ui/input';
+import useDebounce from '@/hooks/use-debounce';
+import { useNavigate } from 'react-router-dom';
+import Pagination from '@/components/ui/pagination';
+import usePaginationStore from '@/store/pagination';
+import ConfirmModal from '@/components/ui/confirmModal';
 
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState([]);
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+  const { currentPage } = usePaginationStore();
+  const debouncedSearch = useDebounce(search, 500);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const { users, fetchUsers, loading, deleteUser } = useUserStore();
 
-  const onSearch = async (e) => {
-    e.preventDefault();
-    const res = await adminService.getUsers(`?search=${query}`);
-    setUsers(res);
-  };
+  useEffect(() => {
+    const query = {
+      search: debouncedSearch
+    };
+    fetchUsers(query);
+  }, [currentPage, fetchUsers, debouncedSearch]);
 
   const columns = [
     { key: 'name', title: 'Name', render: (r) => r.name },
     { key: 'email', title: 'Email', render: (r) => r.email },
-    { key: 'role', title: 'Role', render: (r) => r.role },
+    {
+      key: 'role',
+      title: 'Role',
+      render: (r) => r.role.charAt(0).toUpperCase() + r.role.slice(1)
+    },
+    {
+      key: 'status',
+      title: 'Status',
+      render: (r) => (
+        <span
+          className={`px-2 py-1 rounded text-sm font-medium ${
+            r.isBlocked
+              ? 'bg-red-100 text-red-700'
+              : 'bg-green-100 text-green-700'
+          }`}
+        >
+          {r.isBlocked ? 'Blocked' : 'Active'}
+        </span>
+      )
+    },
     {
       key: 'actions',
       title: 'Actions',
-      render: () => <button className="text-red-600">Delete</button>
+      render: (r) => (
+        <div className="flex items-center gap-2">
+          <FaEye
+            size={16}
+            onClick={() => navigate(`/users/view/${r._id}`)}
+            className="text-gray-500 cursor-pointer hover:text-gray-600"
+          />
+          <FiTrash
+            size={16}
+            onClick={() => handleDeleteClick(r)}
+            className="text-red-600 cursor-pointer hover:text-red-800"
+          />
+        </div>
+      )
     }
   ];
 
-  const fetchUsers = async () => {
-    setLoading(true);
-    const res = await adminService.getUsers();
-    setUsers(res);
-    setLoading(false);
+  const handleDeleteClick = (product) => {
+    setModalOpen(true);
+    setSelectedUser(product);
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const handleConfirmDelete = async () => {
+    if (!selectedUser) return;
+    await deleteUser(selectedUser._id);
+    fetchUsers({ search: debouncedSearch });
+    setModalOpen(false);
+  };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Users</h1>
-      <form onSubmit={onSearch} className="flex gap-2 mb-4">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search users"
-          className="border rounded px-3 py-2 flex-1"
+    <React.Fragment>
+      <ConfirmModal
+        open={modalOpen}
+        loading={loading}
+        title="Delete User"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setModalOpen(false)}
+        message={`Are you sure you want to delete the user?`}
+      />
+      <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
+      <div className="flex flex-wrap justify-end gap-4 mb-6 items-end">
+        <Input
+          value={search}
+          placeholder="Search users..."
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="px-4 py-2 bg-blue-600 text-white rounded">
-          Search
-        </button>
-      </form>
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <Table columns={columns} data={users} />
-      )}
-    </div>
+      </div>
+      <Table columns={columns} data={users} loading={loading} />
+      <Pagination />
+    </React.Fragment>
   );
 }

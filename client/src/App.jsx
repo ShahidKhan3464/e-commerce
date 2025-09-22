@@ -16,12 +16,13 @@ import OrdersPage from './pages/users/orders/list';
 import ProductForm from './pages/admin/products/form';
 import ProductsPage from './pages/users/products/list';
 import UserDashboardPage from './pages/users/dashboard';
-// import ProductDetailPage from './pages/users/products/productDetail';
+import ProductDetailPage from './pages/users/products/detail';
 
 // Admin pages
-import AdminUsersPage from './pages/admin/users/list';
+import UsersPage from './pages/admin/users/list';
 import AdminOrdersPage from './pages/admin/orders/list';
 import AdminDashboardPage from './pages/admin/dashboard';
+import UsersDetailPage from './pages/admin/users/detail';
 import AdminProductsPage from './pages/admin/products/list';
 
 export default function App() {
@@ -79,15 +80,27 @@ export default function App() {
         />
 
         <Route
-          path="/profile"
+          path="/users"
+          element={<RoleRoute adminOnly adminComponent={<UsersPage />} />}
+        />
+
+        <Route
+          path="/users/view/:id"
+          element={<RoleRoute adminOnly adminComponent={<UsersDetailPage />} />}
+        />
+
+        <Route
+          path="/products/view/:id"
           element={
-            <RoleRoute customerOnly customerComponent={<ProfilePage />} />
+            <RoleRoute customerOnly customerComponent={<ProductDetailPage />} />
           }
         />
 
         <Route
-          path="/users"
-          element={<RoleRoute adminOnly adminComponent={<AdminUsersPage />} />}
+          path="/profile"
+          element={
+            <RoleRoute customerOnly customerComponent={<ProfilePage />} />
+          }
         />
       </Route>
 
