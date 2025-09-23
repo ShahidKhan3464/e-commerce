@@ -20,29 +20,20 @@ export default function Layout() {
             >
               My Store
             </div>
-            {!user ? (
-              <div className="space-x-3">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow hover:bg-blue-700 transition"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            ) : (
+            <div className="space-x-3">
               <Link
-                to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition"
+                to="/login"
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition"
               >
-                Go to Dashboard
+                Login
               </Link>
-            )}
+              <Link
+                to="/register"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium shadow hover:bg-blue-700 transition"
+              >
+                Sign Up
+              </Link>
+            </div>
           </div>
         </header>
         <main className="flex-1 bg-white pt-16">

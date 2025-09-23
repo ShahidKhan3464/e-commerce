@@ -13,17 +13,11 @@ export default function Sidebar() {
 
   const links = [
     { name: 'Dashboard', path: '/dashboard', icon: <FaTachometerAlt /> },
+    { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
+    { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
     ...(user?.role === 'admin'
-      ? [
-          { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
-          { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
-          { name: 'Users', path: '/users', icon: <FaUsers /> }
-        ]
-      : [
-          { name: 'Orders', path: '/orders', icon: <FaShoppingCart /> },
-          { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
-          { name: 'Profile', path: '/profile', icon: <FaUser /> }
-        ])
+      ? [{ name: 'Users', path: '/users', icon: <FaUsers /> }]
+      : [{ name: 'Profile', path: '/profile', icon: <FaUser /> }])
   ];
 
   return (

@@ -1,7 +1,8 @@
 import Product from '../models/product.js';
 
 const buildFilter = ({ userId, search, category, minPrice, maxPrice }) => {
-  const filter = { user: userId };
+  // const filter = { user: userId };
+  const filter = {};
 
   if (category) {
     filter.category = { $regex: `^${category}$`, $options: 'i' };

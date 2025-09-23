@@ -36,8 +36,17 @@ export const userRegister = async (user, res) => {
 export const userLogin = async (user, res) => {
   const { email, password } = user;
   const login_user = await findUserByEmail(email);
+
   if (!login_user) {
     return errorResponse(res, 'Invalid credentials', 400);
+  }
+
+  if (login_user.isBlocked) {
+    return errorResponse(
+      res,
+      'Your account has been blocked. Please contact support.',
+      403
+    );
   }
 
   const isMatch = await comparePassword(password, login_user.password);
@@ -46,6 +55,8 @@ export const userLogin = async (user, res) => {
     return errorResponse(res, 'Invalid credentials', 400);
   }
 
+  login_user.lastLogin = new Date();
+  await login_user.save();
   const token = jwt.sign({ _id: login_user.id }, process.env.JWT_SECRET);
   const userData = {
     _id: login_user._id,

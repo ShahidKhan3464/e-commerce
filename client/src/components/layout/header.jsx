@@ -7,22 +7,39 @@ export default function Header() {
   const { user, logout } = useAuthStore();
   const [open, setOpen] = useState(false);
 
-  const routeTitle =
-    {
-      '/dashboard': 'Dashboard',
-      '/orders': 'My Orders',
+  // Function to determine route title based on path + role
+  const getRouteTitle = (pathname, role) => {
+    if (
+      pathname.startsWith('/products/edit/') ||
+      pathname.startsWith('/products/view')
+    ) {
+      return role === 'admin' ? 'Update Product' : 'Product Details';
+    }
+
+    if (pathname.startsWith('/users/view')) {
+      return role === 'admin' ? 'User Details' : 'User Details';
+    }
+
+    const titles = {
       '/profile': 'Profile',
-      '/admin/dashboard': 'Admin Dashboard',
-      '/admin/orders': 'Manage Orders',
-      '/admin/products': 'Manage Products',
-      '/admin/users': 'Manage Users'
-    }[location.pathname] || 'Store';
+      '/dashboard': 'Dashboard',
+      '/users': 'Manage Users',
+      '/orders': role === 'admin' ? 'Manage Orders' : 'My Orders',
+      '/products': role === 'admin' ? 'Manage Products' : 'Products'
+    };
+
+    return titles[pathname] || 'Store';
+  };
+
+  const routeTitle = getRouteTitle(location.pathname, user?.role);
 
   const getInitials = (name) => {
     if (!name) return '';
     const names = name.split(' ');
-    const initials = names.map((n) => n.toUpperCase()).join('');
-    return initials.slice(0, 2);
+    return names
+      .map((n) => n[0]?.toUpperCase())
+      .join('')
+      .slice(0, 2);
   };
 
   return (
