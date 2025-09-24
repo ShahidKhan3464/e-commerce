@@ -3,7 +3,8 @@ import {
   findUsers,
   countUsers,
   findUserById,
-  findUserByIdAndDelete
+  findUserByIdAndDelete,
+  findUserByIdAndUpdate
 } from '../repositories/user.js';
 
 export const getUserByIdService = async (id, res) => {
@@ -39,6 +40,12 @@ export const deleteUserService = async (id, res) => {
   const user = await getUserByIdService(id, res);
   await findUserByIdAndDelete(id);
   return successResponse(res, user, 'Successfully Deleted');
+};
+
+export const updateUserService = async (id, data, res) => {
+  const user = await getUserByIdService(id, res);
+  await findUserByIdAndUpdate(id, data);
+  return successResponse(res, user, 'Successfully Updated');
 };
 
 export const blockUserService = async (id, block, res) => {

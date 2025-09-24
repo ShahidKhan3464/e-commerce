@@ -45,6 +45,22 @@ const useUserStore = create((set) => ({
     }
   },
 
+  // Update user
+  updateUser: async (id, payload) => {
+    set({ loading: true });
+    try {
+      const res = await userService.updateUser(id, payload);
+      set({ loading: false });
+      return res.data;
+    } catch (err) {
+      set({
+        error: err?.response?.data?.message || err.message,
+        loading: false
+      });
+      throw err;
+    }
+  },
+
   // Delete user
   deleteUser: async (id) => {
     set({ loading: true });

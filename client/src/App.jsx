@@ -11,6 +11,7 @@ import ResetPasswordPage from './pages/auth/resetPassword';
 import ForgotPasswordPage from './pages/auth/forgotPassword';
 
 // User pages
+import CartPage from './pages/users/cart/list';
 import ProfilePage from './pages/users/profile';
 import OrdersPage from './pages/users/orders/list';
 import ProductForm from './pages/admin/products/form';
@@ -94,6 +95,11 @@ export default function App() {
           element={
             <RoleRoute customerOnly customerComponent={<ProductDetailPage />} />
           }
+        />
+
+        <Route
+          path="/cart"
+          element={<RoleRoute customerOnly customerComponent={<CartPage />} />}
         />
 
         <Route

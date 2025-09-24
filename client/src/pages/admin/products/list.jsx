@@ -103,10 +103,7 @@ export default function AdminProductsPage() {
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Manage Products</h1>
-        <Button
-          onClick={() => navigate('/products/create')}
-          className="bg-blue-600 text-white py-2.5 rounded-lg shadow hover:bg-blue-700 transition"
-        >
+        <Button variant="primary" onClick={() => navigate('/products/create')}>
           + Add Product
         </Button>
       </div>

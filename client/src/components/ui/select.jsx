@@ -6,7 +6,7 @@ export default function Select({ label, className, options = [], ...props }) {
       {label && <div className="mb-1 text-sm font-medium">{label}</div>}
       <select
         {...props}
-        className={`w-full border rounded px-3 py-2 ${className}`}
+        className={`w-full bg-white border border-gray-300 rounded-lg px-3 py-2 ${className}`}
       >
         <option value="">{props.placeholder}</option>
         {options.map((opt) => (

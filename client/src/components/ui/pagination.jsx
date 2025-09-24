@@ -48,7 +48,7 @@ export default function Pagination() {
       <button
         disabled={currentPage === 1}
         onClick={() => setPage(currentPage - 1)}
-        className="px-3 py-1 cursor-pointer border rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-3 py-1 cursor-pointer border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Prev
       </button>
@@ -62,7 +62,7 @@ export default function Pagination() {
           <button
             key={page}
             onClick={() => setPage(page)}
-            className={`px-3 py-1 cursor-pointer border rounded ${
+            className={`px-3 py-1 cursor-pointer border rounded-lg ${
               currentPage === page ? 'bg-indigo-500 text-white' : 'bg-white'
             }`}
           >
@@ -74,7 +74,7 @@ export default function Pagination() {
       <button
         disabled={currentPage === totalPages}
         onClick={() => setPage(currentPage + 1)}
-        className="px-3 py-1 cursor-pointer border rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-3 py-1 cursor-pointer border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Next
       </button>

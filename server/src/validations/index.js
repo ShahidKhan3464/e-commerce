@@ -1,5 +1,6 @@
 import { validateLogin } from './loginUser.js';
-import { validateProduct } from './addProduct.js';
+import { validateOrder } from './createOrder.js';
 import { validateSignup } from './registerUser.js';
+import { validateProduct } from './createProduct.js';
 
-export { validateLogin, validateSignup, validateProduct };
+export { validateLogin, validateSignup, validateOrder, validateProduct };

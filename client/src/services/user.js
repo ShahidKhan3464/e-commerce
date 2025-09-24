@@ -18,6 +18,12 @@ const userService = {
     return data;
   },
 
+  // Update user
+  updateUser: async (id, payload) => {
+    const { data } = await api.put(`/users/${id}`, payload);
+    return data;
+  },
+
   // Delete user
   deleteUser: async (id) => {
     const { data } = await api.delete(`/users/${id}`);
@@ -25,8 +31,8 @@ const userService = {
   },
 
   // Block / unblock user
-  onToggleBlock: async (id, block) => {
-    const { data } = await api.patch(`/users/${id}/toggleBlock`, block);
+  onToggleBlock: async (id, payload) => {
+    const { data } = await api.patch(`/users/${id}/toggleBlock`, payload);
     return data;
   }
 };

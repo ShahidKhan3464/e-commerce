@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import useCartStore from '@/store/cart';
+import Button from '@/components/ui/button';
 import { useParams } from 'react-router-dom';
 import useProductStore from '@/store/product';
-import Button from '@/components/ui/button';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const { addItem } = useCartStore();
   const { product, fetchProduct, loading } = useProductStore();
 
   useEffect(() => {
@@ -28,7 +30,6 @@ export default function ProductDetailPage() {
           className="w-full h-[400px] object-cover rounded-lg shadow-md"
         />
       </div>
-
       <div className="flex flex-col justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
@@ -52,9 +53,9 @@ export default function ProductDetailPage() {
         <div className="mt-4 border-t pt-4">
           <div className="flex items-center justify-between mb-4">
             <span className="text-gray-700">
-              Stock: {product.stock > 0 ? product.stock : 'Out of Stock'}
+              Stock: {product.stock > 0 ? product.stock : 'In Stock'}
             </span>
-            {product.stock > 0 && (
+            {product.stock < 0 && (
               <span className="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-lg">
                 In Stock
               </span>
@@ -63,16 +64,13 @@ export default function ProductDetailPage() {
 
           <div className="flex gap-4">
             <Button
-              disabled={product.stock <= 0}
-              className={`flex-1 px-5 py-3 rounded-lg font-medium transition ${
-                product.stock > 0
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-              }`}
+              variant="primary"
+              className="flex-1"
+              onClick={() => addItem(product)}
             >
               Add to Cart
             </Button>
-            <Button variant="primary" className="flex-1 rounded-lg">
+            <Button variant="primary" className="flex-1">
               Buy Now
             </Button>
           </div>
@@ -81,3 +79,14 @@ export default function ProductDetailPage() {
     </div>
   );
 }
+
+//  <Button
+//               disabled={product.stock <= 0}
+//               className={`flex-1 px-5 py-3 rounded-lg font-medium transition ${
+//                 product.stock > 0
+//                   ? 'bg-blue-600 text-white hover:bg-blue-700'
+//                   : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+//               }`}
+//             >
+//               Add to Cart
+//             </Button>

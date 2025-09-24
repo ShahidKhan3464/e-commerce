@@ -8,7 +8,7 @@ export default function Button({
   ...props
 }) {
   const base =
-    'cursor-pointer py-2 px-4 rounded font-medium transition disabled:opacity-50 disabled:cursor-not-allowed';
+    'cursor-pointer py-2 px-4 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700',

@@ -7,14 +7,24 @@ const orderSchema = new mongoose.Schema(
       required: true,
       type: mongoose.Schema.Types.ObjectId
     },
-    cart: [
+    products: [
       {
-        title: String,
+        name: String,
         price: Number,
+        image: String,
+        category: String,
         quantity: Number,
+        description: String,
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }
       }
     ],
+    shippingAddress: {
+      fullName: { type: String, required: true },
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      country: { type: String, required: true },
+      postalCode: { type: String, required: true }
+    },
     totalPrice: {
       type: Number,
       required: true
@@ -23,10 +33,15 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    status: {
+    orderStatus: {
+      type: String,
+      default: 'pending',
+      enum: ['pending', 'shipped', 'delivered', 'cancelled']
+    },
+    paymentStatus: {
       type: String,
       default: 'paid',
-      enum: ['pending', 'paid', 'failed']
+      enum: ['paid', 'unpaid', 'refunded']
     }
   },
   { timestamps: true }

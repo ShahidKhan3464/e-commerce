@@ -2,6 +2,7 @@ import { successResponse, exceptionResponse } from '../utils/apiResponse.js';
 import {
   blockUserService,
   deleteUserService,
+  updateUserService,
   getAllUsersService,
   getUserByIdService
 } from '../services/user.js';
@@ -18,6 +19,14 @@ export const getUserHandler = async (req, res) => {
 export const getAllUsersHandler = async (req, res) => {
   try {
     await getAllUsersService(req.query, res);
+  } catch (error) {
+    return exceptionResponse(res, error);
+  }
+};
+
+export const updateUserHandler = async (req, res) => {
+  try {
+    await updateUserService(req.params.id, req.body, res);
   } catch (error) {
     return exceptionResponse(res, error);
   }
