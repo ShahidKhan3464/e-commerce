@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from './button';
+import useCartStore from '@/store/cart';
 import { useNavigate } from 'react-router-dom';
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
+  const { addItem } = useCartStore();
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
@@ -31,7 +33,11 @@ export default function ProductCard({ product }) {
           >
             View Details
           </Button>
-          <Button variant="primary" className="flex-1 rounded-lg">
+          <Button
+            variant="primary"
+            className="flex-1"
+            onClick={() => addItem(product)}
+          >
             Add to Cart
           </Button>
         </div>

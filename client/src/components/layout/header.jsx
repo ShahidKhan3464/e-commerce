@@ -21,9 +21,10 @@ export default function Header() {
     }
 
     const titles = {
+      '/cart': 'Cart',
       '/profile': 'Profile',
-      '/dashboard': 'Dashboard',
       '/users': 'Manage Users',
+      '/dashboard': 'Dashboard',
       '/orders': role === 'admin' ? 'Manage Orders' : 'My Orders',
       '/products': role === 'admin' ? 'Manage Products' : 'Products'
     };
@@ -43,40 +44,42 @@ export default function Header() {
   };
 
   return (
-    <header className="flex justify-between items-center bg-white shadow p-4">
-      <h1 className="text-lg font-semibold">{routeTitle}</h1>
-      {user && (
-        <div className="relative">
-          <button
-            onClick={() => setOpen(!open)}
-            className="flex items-center justify-center cursor-pointer text-white font-bold space-x-2 bg-gray-400 rounded-full px-3 py-2 focus:outline-none"
-          >
-            {getInitials(user.name)}
-          </button>
+    <div className="h-[72px]">
+      <header className="fixed top-0 w-[calc(100%_-_256px)] z-50 flex justify-between items-center bg-white shadow p-4">
+        <h1 className="text-lg font-semibold">{routeTitle}</h1>
+        {user && (
+          <div className="relative">
+            <button
+              onClick={() => setOpen(!open)}
+              className="flex items-center justify-center cursor-pointer text-white font-bold space-x-2 bg-gray-400 rounded-full px-3 py-2 focus:outline-none"
+            >
+              {getInitials(user.name)}
+            </button>
 
-          {open && (
-            <div className="absolute right-0 mt-2 w-60 bg-white border border-solid border-gray-200 rounded shadow-lg z-10">
-              <div className="p-4 border-b border-gray-200">
-                <p className="font-semibold">{user.name}</p>
-                <p className="text-sm text-gray-500 truncate">{user.email}</p>
+            {open && (
+              <div className="absolute right-0 mt-2 w-60 bg-white border border-solid border-gray-200 rounded shadow-lg z-10">
+                <div className="p-4 border-b border-gray-200">
+                  <p className="font-semibold">{user.name}</p>
+                  <p className="text-sm text-gray-500 truncate">{user.email}</p>
+                </div>
+                <Link
+                  to="/profile"
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2 hover:bg-gray-100"
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={logout}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
               </div>
-              <Link
-                to="/profile"
-                onClick={() => setOpen(false)}
-                className="block px-4 py-2 hover:bg-gray-100"
-              >
-                Profile
-              </Link>
-              <button
-                onClick={logout}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100"
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-    </header>
+            )}
+          </div>
+        )}
+      </header>
+    </div>
   );
 }

@@ -32,7 +32,7 @@ export default function ImageUpload({ onChange, previewUrl, label = 'Image' }) {
         )}
         <button
           type="button"
-          className="mt-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          className="mt-2 rounded-lg px-4 py-1 bg-blue-600 text-white hover:bg-blue-700 transition"
         >
           Select Image
         </button>

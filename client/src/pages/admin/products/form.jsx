@@ -106,7 +106,12 @@ export default function ProductForm() {
           placeholder="Description"
         />
         <ImageUpload previewUrl={form.preview} onChange={handleImageChange} />
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={loading}
+        >
           {loading ? 'Loading...' : id ? 'Update Product' : 'Create Product'}
         </Button>
       </form>

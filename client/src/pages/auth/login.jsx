@@ -34,6 +34,7 @@ export default function LoginPage() {
         {/* Form */}
         <form onSubmit={submit} className="space-y-5">
           <Input
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             label="Email"
@@ -58,8 +59,9 @@ export default function LoginPage() {
 
           <Button
             type="submit"
+            variant="primary"
+            className="w-full"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg shadow hover:bg-blue-700 transition"
           >
             {loading ? 'Loading...' : 'Login'}
           </Button>

@@ -26,7 +26,10 @@ export const findUsers = async (options) => {
   const { skip = 0, limit = 4 } = options;
   const filter = buildFilter(options);
 
-  return await User.find(filter).skip(skip).limit(limit);
+  return await User.find(filter)
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 });
 };
 
 export const countUsers = async (options) => {
@@ -40,4 +43,12 @@ export const findUserById = async (id) => {
 
 export const findUserByIdAndDelete = async (id) => {
   return await User.findByIdAndDelete(id);
+};
+
+export const findUserByIdAndUpdate = async (id, data, options = {}) => {
+  return await User.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+    ...options
+  });
 };
