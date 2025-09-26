@@ -17,10 +17,7 @@ import {
 export const userRegister = async (user, res) => {
   const { name, email, password } = user;
   const existUser = await findUserByEmail(email);
-
-  if (existUser) {
-    return errorResponse(res, 'User already exists.', 409);
-  }
+  if (existUser) return errorResponse(res, 'User already exists.', 409);
 
   const hashedPassword = await encryptPassword(password);
   const newUser = await createUser({
@@ -36,28 +33,27 @@ export const userRegister = async (user, res) => {
 export const userLogin = async (user, res) => {
   const { email, password } = user;
   const login_user = await findUserByEmail(email);
+  if (!login_user) return errorResponse(res, 'Invalid credentials', 400);
 
-  if (!login_user) {
-    return errorResponse(res, 'Invalid credentials', 400);
-  }
-
-  if (login_user.isBlocked) {
+  if (login_user.isBlocked)
     return errorResponse(
       res,
       'Your account has been blocked. Please contact support.',
       403
     );
-  }
 
   const isMatch = await comparePassword(password, login_user.password);
 
-  if (!isMatch) {
-    return errorResponse(res, 'Invalid credentials', 400);
-  }
+  if (!isMatch) return errorResponse(res, 'Invalid credentials', 400);
 
   login_user.lastLogin = new Date();
   await login_user.save();
-  const token = jwt.sign({ _id: login_user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign(
+    { _id: login_user._id, role: login_user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
   const userData = {
     _id: login_user._id,
     name: login_user.name,
@@ -74,10 +70,7 @@ export const userLogin = async (user, res) => {
 export const forgotPassword = async (user, res) => {
   const { email } = user;
   const existUser = await findUserByEmail(email);
-
-  if (!existUser) {
-    return errorResponse(res, 'User not found.', 404);
-  }
+  if (!existUser) return errorResponse(res, 'User not found.', 404);
 
   const token = generateResetToken();
   const hashedToken = await resetTokenHash(token);
@@ -100,16 +93,12 @@ export const forgotPassword = async (user, res) => {
 export const resetPassword = async (user, res) => {
   const { token, email, password } = user;
   const existUser = await findUserByEmail(email);
-
-  if (!existUser) {
-    return errorResponse(res, 'User not found.', 404);
-  }
+  if (!existUser) return errorResponse(res, 'User not found.', 404);
 
   const isTokenValid = await compareToken(token, existUser.resetPasswordToken);
 
-  if (!isTokenValid || existUser.resetPasswordExpires < Date.now()) {
+  if (!isTokenValid || existUser.resetPasswordExpires < Date.now())
     return errorResponse(res, 'Invalid or expired reset token', 400);
-  }
 
   const hashedPassword = await encryptPassword(password);
 

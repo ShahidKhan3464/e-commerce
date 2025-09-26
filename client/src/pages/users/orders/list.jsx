@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { FaEye } from 'react-icons/fa';
 import Table from '@/components/ui/table';
 import Input from '@/components/ui/input';
 import useOrderStore from '@/store/order';
-import { useNavigate } from 'react-router-dom';
 import useDebounce from '@/hooks/use-debounce';
+import { useNavigate } from 'react-router-dom';
 import Pagination from '@/components/ui/pagination';
 import usePaginationStore from '@/store/pagination';
+import { downloadInvoice } from '@/utils/downloadInvoice';
+import { FaEye, FaFileInvoiceDollar } from 'react-icons/fa';
+import {
+  getOrderStatusClasses,
+  getPaymentStatusClasses
+} from '@/utils/statusColors';
 
-const statusColors = {
-  shipped: 'bg-blue-100 text-blue-800',
-  cancelled: 'bg-red-100 text-red-800',
-  pending: 'bg-yellow-100 text-yellow-800',
-  delivered: 'bg-green-100 text-green-800'
-};
-
-const getOrderStatusClasses = (status) =>
-  statusColors[status] || 'bg-gray-100 text-gray-800';
-
-export default function AdminProductsPage() {
+export default function OrdersPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const { currentPage } = usePaginationStore();
@@ -27,12 +22,12 @@ export default function AdminProductsPage() {
   const { orders, fetchOrders, loading } = useOrderStore();
 
   useEffect(() => {
-    const query = { search: '' };
+    const query = { search: debouncedSearch };
     fetchOrders(query);
-  }, [currentPage, fetchOrders]);
+  }, [currentPage, debouncedSearch, fetchOrders]);
 
   const columns = [
-    { key: '_id', title: 'Order ID', render: (r) => r._id },
+    { key: '_id', title: 'Order ID', render: (r) => `#${r._id.slice(-6)}` },
     {
       title: 'Date',
       key: 'createdAt',
@@ -57,6 +52,19 @@ export default function AdminProductsPage() {
       )
     },
     {
+      title: 'Payment',
+      key: 'paymentStatus',
+      render: (r) => (
+        <span
+          className={`px-3 py-1 text-xs font-medium capitalize rounded-full ${getPaymentStatusClasses(
+            r.paymentStatus
+          )}`}
+        >
+          {r.paymentStatus}
+        </span>
+      )
+    },
+    {
       key: 'actions',
       title: 'Actions',
       render: (r) => (
@@ -65,6 +73,11 @@ export default function AdminProductsPage() {
             size={16}
             onClick={() => navigate(`/orders/view/${r._id}`)}
             className="text-gray-500 cursor-pointer hover:text-gray-600"
+          />
+          <FaFileInvoiceDollar
+            size={16}
+            onClick={() => downloadInvoice(r, true)}
+            className="text-green-600 cursor-pointer hover:text-green-800"
           />
         </div>
       )

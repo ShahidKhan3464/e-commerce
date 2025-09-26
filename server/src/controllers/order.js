@@ -1,8 +1,10 @@
-import { exceptionResponse } from '../utils/apiResponse.js';
+import { exceptionResponse, successResponse } from '../utils/apiResponse.js';
 import {
   createOrderService,
   getAllOrdersService,
-  getOrderByIdService
+  getOrderByIdService,
+  updateOrderStatusService,
+  updatePaymentStatusService
 } from '../services/order.js';
 
 export const createOrderHandler = async (req, res) => {
@@ -29,6 +31,22 @@ export const getOrderHandler = async (req, res) => {
 export const getAllOrdersHandler = async (req, res) => {
   try {
     await getAllOrdersService(req.query, req.user, res);
+  } catch (error) {
+    return exceptionResponse(res, error);
+  }
+};
+
+export const updateOrderStatusHandler = async (req, res) => {
+  try {
+    await updateOrderStatusService(req.params.id, req.body, req.user, res);
+  } catch (error) {
+    return exceptionResponse(res, error);
+  }
+};
+
+export const updatePaymentStatusHandler = async (req, res) => {
+  try {
+    await updatePaymentStatusService(req.params.id, req.body, req.user, res);
   } catch (error) {
     return exceptionResponse(res, error);
   }

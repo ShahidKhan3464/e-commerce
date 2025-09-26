@@ -19,6 +19,16 @@ const orderService = {
   createOrder: async (payload) => {
     const { data } = await api.post('/orders', payload);
     return data;
+  },
+
+  updateOrderStatus: async (id, payload) => {
+    const { data } = await api.patch(`/orders/${id}/status`, payload);
+    return data;
+  },
+
+  updatePaymentStatus: async (id, payload) => {
+    const { data } = await api.patch(`/orders/${id}/payment`, payload);
+    return data;
   }
 };
 

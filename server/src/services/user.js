@@ -9,9 +9,7 @@ import {
 
 export const getUserByIdService = async (id, res) => {
   const user = await findUserById(id);
-  if (!user) {
-    return errorResponse(res, 'User not found.', 404);
-  }
+  if (!user) return errorResponse(res, 'User not found.', 404);
   return user;
 };
 
