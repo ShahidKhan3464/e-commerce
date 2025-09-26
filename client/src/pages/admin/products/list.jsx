@@ -11,7 +11,7 @@ import Pagination from '@/components/ui/pagination';
 import usePaginationStore from '@/store/pagination';
 import ConfirmModal from '@/components/ui/confirmModal';
 
-export default function AdminProductsPage() {
+export default function ProductsPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
@@ -101,7 +101,7 @@ export default function AdminProductsPage() {
         message={`Are you sure you want to delete the product?`}
       />
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center gap-2 mb-6">
         <h1 className="text-2xl font-bold">Manage Products</h1>
         <Button variant="primary" onClick={() => navigate('/products/create')}>
           + Add Product
@@ -115,7 +115,6 @@ export default function AdminProductsPage() {
           placeholder="Search products..."
           onChange={(e) => setSearch(e.target.value)}
         />
-
         <div className="flex gap-2">
           <Input
             type="number"
@@ -130,7 +129,6 @@ export default function AdminProductsPage() {
             onChange={(e) => setMaxPrice(e.target.value)}
           />
         </div>
-
         <Select
           value={category}
           placeholder="Select category"
@@ -141,7 +139,6 @@ export default function AdminProductsPage() {
             { value: 'books', label: 'Books' }
           ]}
         />
-
         <Button variant="secondary" onClick={handleResetFilters}>
           Reset Filters
         </Button>

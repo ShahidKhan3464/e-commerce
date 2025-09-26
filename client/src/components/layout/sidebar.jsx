@@ -21,10 +21,8 @@ export default function Sidebar() {
     { name: 'Products', path: '/products', icon: <FaBoxOpen /> },
     ...(user?.role === 'admin'
       ? [{ name: 'Users', path: '/users', icon: <FaUsers /> }]
-      : [
-          { name: 'Cart', path: '/cart', icon: <FaShoppingCart /> },
-          { name: 'Profile', path: '/profile', icon: <FaUser /> }
-        ])
+      : [{ name: 'Cart', path: '/cart', icon: <FaShoppingCart /> }]),
+    { name: 'Profile', path: '/profile', icon: <FaUser /> }
   ];
 
   return (

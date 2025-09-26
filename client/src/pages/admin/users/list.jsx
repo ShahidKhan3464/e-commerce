@@ -10,7 +10,7 @@ import Pagination from '@/components/ui/pagination';
 import usePaginationStore from '@/store/pagination';
 import ConfirmModal from '@/components/ui/confirmModal';
 
-export default function AdminUsersPage() {
+export default function UsersPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const { currentPage } = usePaginationStore();
@@ -91,8 +91,8 @@ export default function AdminUsersPage() {
         onCancel={() => setModalOpen(false)}
         message={`Are you sure you want to delete the user?`}
       />
-      <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
-      <div className="flex flex-wrap justify-end gap-4 mb-6 items-end">
+      <div className="flex items-center justify-center gap-2 mb-6">
+        <h1 className="text-2xl font-bold">Manage Users</h1>
         <Input
           value={search}
           placeholder="Search users..."

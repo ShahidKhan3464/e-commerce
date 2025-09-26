@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuth } from '../middlewares/isAuth.js';
+import { isAuth } from '../middlewares/index.js';
 import {
   getUserHandler,
   blockUserHandler,

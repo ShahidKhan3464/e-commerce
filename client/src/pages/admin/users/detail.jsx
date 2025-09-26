@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import useUserStore from '@/store/user';
 import { useParams } from 'react-router-dom';
 
-export default function AdminUsersDetailPage() {
+export default function UserDetailPage() {
   const { id } = useParams();
   const { user, loading, fetchUser, onToggleBlock } = useUserStore();
   const isBlocked = user?.isBlocked;

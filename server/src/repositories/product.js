@@ -59,8 +59,8 @@ export const findProductById = async (id) => {
 export const findProductByIdAndUpdate = async (id, data, options = {}) => {
   return await Product.findByIdAndUpdate(id, data, {
     new: true,
-    runValidators: true,
-    ...options
+    ...options,
+    runValidators: true
   });
 };
 

@@ -23,16 +23,7 @@ export const createProductService = async (productData, res) => {
 // Get product by ID with authorization check
 export const getProductByIdService = async (id, user, res) => {
   const product = await findProductById(id);
-  if (!product) {
-    return errorResponse(res, 'Product not found.', 404);
-  }
-  // if (product.user.toString() !== user._id.toString()) {
-  //   return errorResponse(
-  //     res,
-  //     'Unauthorized: You can only view your own products',
-  //     403
-  //   );
-  // }
+  if (!product) return errorResponse(res, 'Product not found.', 404);
   return product;
 };
 
@@ -47,7 +38,6 @@ export const getAllProductsService = async (filters = {}, user, res) => {
     skip,
     limit,
     search,
-    // userId: user._id,
     sortBy: filters.sortBy,
     minPrice: filters.minPrice,
     maxPrice: filters.maxPrice,

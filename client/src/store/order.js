@@ -56,6 +56,32 @@ const useOrderStore = create((set) => ({
       });
       throw err;
     }
+  },
+
+  updateOrderStatus: async (id, status) => {
+    try {
+      const res = await orderService.updateOrderStatus(id, status);
+      return res;
+    } catch (err) {
+      set({
+        error: err?.response?.data?.message || err.message,
+        loading: false
+      });
+      throw err;
+    }
+  },
+
+  updatePaymentStatus: async (id, paymentStatus) => {
+    try {
+      const res = await orderService.updatePaymentStatus(id, paymentStatus);
+      return res;
+    } catch (err) {
+      set({
+        error: err?.response?.data?.message || err.message,
+        loading: false
+      });
+      throw err;
+    }
   }
 }));
 

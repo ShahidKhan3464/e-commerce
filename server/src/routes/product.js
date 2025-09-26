@@ -1,6 +1,5 @@
 import express from 'express';
-import { isAuth } from '../middlewares/isAuth.js';
-import { upload } from '../middlewares/upload.js';
+import { isAuth, upload } from '../middlewares/index.js';
 import { validateProduct } from '../validations/index.js';
 import {
   getProductHandler,
