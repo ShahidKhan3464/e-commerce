@@ -36,14 +36,12 @@ export default function UserDashboard() {
         <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
         <Table
           columns={['Order ID', 'Amount', 'Status', 'Date']}
-          data={userOrders
-            .slice(0, 5)
-            .map((o) => [
-              o._id,
-              `$${o.amount}`,
-              o.status,
-              new Date(o.createdAt).toLocaleDateString()
-            ])}
+          data={userOrders.slice(0, 5).map((o) => [
+            o._id,
+            `$${o.amount}`,
+            o.status
+            // new Date(o.createdAt).toLocaleDateString()
+          ])}
         />
       </div>
     </div>

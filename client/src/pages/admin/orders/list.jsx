@@ -86,7 +86,7 @@ export default function OrdersPage() {
           />
           <FaFileInvoiceDollar
             size={16}
-            onClick={() => downloadInvoice(r)}
+            onClick={() => downloadInvoice(r, true)}
             className="text-green-600 cursor-pointer hover:text-green-800"
           />
         </div>

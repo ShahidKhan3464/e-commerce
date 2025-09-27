@@ -82,13 +82,13 @@ export default function OrderDetailPage() {
 
         <div className="p-3 bg-white border border-solid border-gray-200 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span className="text-gray-700">Total</span>
             <span className="text-2xl font-bold text-blue-600">
               ${order.totalPrice}
             </span>
           </div>
-          <div className="mt-2 flex justify-between">
+          <div className="mt-2 flex justify-between items-center">
             <span className="text-gray-700">Payment</span>
             <span
               className={`px-3 py-1 text-xs font-medium capitalize rounded-full ${getPaymentStatusClasses(
@@ -104,7 +104,7 @@ export default function OrderDetailPage() {
           <Button
             variant="primary"
             className="flex-1"
-            onClick={() => downloadInvoice(order, true)}
+            onClick={() => downloadInvoice(order)}
           >
             Download Invoice
           </Button>

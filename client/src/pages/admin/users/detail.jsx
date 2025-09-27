@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import dayjs from 'dayjs';
 import useUserStore from '@/store/user';
 import { useParams } from 'react-router-dom';
 
@@ -11,26 +12,13 @@ export default function UserDetailPage() {
     fetchUser(id);
   }, [id, fetchUser]);
 
-  //   if (loading) {
-  //     return <div className="flex items-center justify-center">Loading...</div>;
-  //   }
+  if (loading) return <div className="text-center py-20">Loading...</div>;
 
   if (!user) {
     return (
       <div className="flex items-center justify-center">User not found.</div>
     );
   }
-
-  const formatDate = (d) => {
-    if (!d) return '—';
-    const date =
-      typeof d === 'string' || typeof d === 'number' ? new Date(d) : d;
-    return new Intl.DateTimeFormat('en-GB', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit'
-    }).format(date);
-  };
 
   const roleColor = (role) => {
     switch ((role || '').toLowerCase()) {
@@ -58,9 +46,9 @@ export default function UserDetailPage() {
 
   return (
     <div className={`max-w-5xl mx-auto bg-white shadow rounded-lg p-6`}>
-      <div className="flex items-center space-x-4">
+      <div className="flex space-x-4">
         <div className="flex-shrink-0">
-          <div className="h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center text-2xl font-semibold text-gray-700">
+          <div className="h-18 w-18 rounded-full bg-gray-100 flex items-center justify-center text-2xl font-semibold text-gray-700">
             {initials(user.name)}
           </div>
         </div>
@@ -71,7 +59,7 @@ export default function UserDetailPage() {
           <p className="text-sm text-gray-500">{user.email || 'No email'}</p>
           <p className="text-sm text-gray-500">{user.phone || 'No phone'}</p>
         </div>
-        <div className="flex flex-col items-end space-y-2">
+        <div className="flex flex-col items-end space-y-3">
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${roleColor(
               user.role
@@ -105,13 +93,17 @@ export default function UserDetailPage() {
         <div>
           <p className="text-xs font-medium text-gray-500">Account created</p>
           <p className="mt-1 text-sm text-gray-900">
-            {formatDate(user.createdAt)}
+            {user.createdAt
+              ? dayjs(user.createdAt).format('D MMM YYYY')
+              : 'N/A'}
           </p>
         </div>
         <div>
           <p className="text-xs font-medium text-gray-500">Last login</p>
           <p className="mt-1 text-sm text-gray-900">
-            {formatDate(user.lastLogin)}
+            {user.lastLogin
+              ? dayjs(user.lastLogin).format('D MMM YYYY')
+              : 'N/A'}
           </p>
         </div>
         <div>

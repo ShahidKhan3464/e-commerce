@@ -9,3 +9,7 @@ body {
 .container {
   @apply max-w-6xl mx-auto px-4;
 }
+
+.is-card .OffsetContainer {
+  display: none;
+}

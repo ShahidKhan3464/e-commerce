@@ -27,7 +27,6 @@ const productSchema = Joi.object({
 export const validateProduct = (req, res, next) => {
   const { error } = productSchema.validate(req.body);
   if (error) {
-    console.log(error);
     return errorResponse(res, error.details[0].message, 422);
   }
   next();

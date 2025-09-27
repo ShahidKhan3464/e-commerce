@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Table({ columns, data, loading }) {
   return (
-    <div className="overflow-x-auto border rounded-lg shadow">
+    <div className="overflow-x-auto border border-solid border-gray-200 rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>

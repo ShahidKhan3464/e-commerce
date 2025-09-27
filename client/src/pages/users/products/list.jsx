@@ -6,6 +6,7 @@ import useProductStore from '@/store/product';
 import useDebounce from '@/hooks/use-debounce';
 import usePaginationStore from '@/store/pagination';
 import Pagination from '@/components/ui/pagination';
+import { handlePriceChange } from '@/utils/general';
 import ProductCard from '@/components/ui/productCard';
 
 export default function ProductsPage() {
@@ -45,27 +46,29 @@ export default function ProductsPage() {
 
   return (
     <React.Fragment>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between gap-2 mb-6">
         <h1 className="text-2xl font-bold">Products</h1>
-        <div className="flex flex-wrap gap-4">
-          <Input
-            value={search}
-            placeholder="Search products..."
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <div className="flex flex-wrap gap-2">
+          <div className="max-w-[180px] 2xl:max-w-[250px]">
+            <Input
+              value={search}
+              placeholder="Search products..."
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 max-w-[200px] 2xl:max-w-[400px]">
             <Input
               type="number"
               value={minPrice}
               placeholder="Min"
-              onChange={(e) => setMinPrice(e.target.value)}
+              onChange={handlePriceChange(setMinPrice)}
             />
             <Input
               type="number"
               value={maxPrice}
               placeholder="Max"
-              onChange={(e) => setMaxPrice(e.target.value)}
+              onChange={handlePriceChange(setMaxPrice)}
             />
           </div>
 
@@ -95,7 +98,7 @@ export default function ProductsPage() {
         </div>
       ) : (
         <React.Fragment>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
             {products.map((p) => (
               <ProductCard key={p._id} product={p} />
             ))}

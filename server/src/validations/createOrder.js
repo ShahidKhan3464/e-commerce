@@ -36,7 +36,6 @@ const orderSchema = Joi.object({
 export const validateOrder = (req, res, next) => {
   const { error } = orderSchema.validate(req.body);
   if (error) {
-    console.log(error);
     return errorResponse(res, error.details[0].message, 422);
   }
   next();

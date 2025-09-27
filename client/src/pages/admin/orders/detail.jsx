@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import useOrderStore from '@/store/order';
 import Button from '@/components/ui/button';
 import { useParams } from 'react-router-dom';
@@ -41,6 +42,7 @@ export default function OrderDetailPage() {
     try {
       setStatusLoading(true);
       await updateOrderStatus(order._id, { orderStatus: status });
+      toast.success('Status updated successfully');
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Something went wrong');
     } finally {
@@ -52,6 +54,7 @@ export default function OrderDetailPage() {
     try {
       setStatusLoading(true);
       await updatePaymentStatus(order._id, { paymentStatus: payment });
+      toast.success('Payment status updated successfully');
     } catch (err) {
       toast.error(err?.response?.data?.message || 'Something went wrong');
     } finally {
@@ -87,7 +90,7 @@ export default function OrderDetailPage() {
           </p>
           <p>
             <span className="font-semibold">Last Login:</span>{' '}
-            {new Date(order.user.lastLogin).toLocaleString()}
+            {dayjs(order.user.lastLogin).format('M/D/YYYY, h:mm:ss A')}
           </p>
         </div>
 
@@ -206,7 +209,7 @@ export default function OrderDetailPage() {
             variant="primary"
             className="flex-1"
             disabled={statusLoading}
-            onClick={() => downloadInvoice(order)}
+            onClick={() => downloadInvoice(order, true)}
           >
             Download Invoice
           </Button>

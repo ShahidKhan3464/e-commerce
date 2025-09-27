@@ -10,8 +10,8 @@ export const createPaymentIntent = async (data) => {
     automatic_payment_methods: { enabled: true },
     metadata: {
       userId,
-      cart: JSON.stringify(cart),
-      shipping: JSON.stringify(shippingAddress)
+      shipping: JSON.stringify(shippingAddress),
+      cartIds: cart.map((item) => item._id).join(',')
     },
     shipping: {
       name: shippingAddress.fullName,

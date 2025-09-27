@@ -1,47 +1,47 @@
 import jsPDF from 'jspdf';
+import dayjs from 'dayjs';
 import autoTable from 'jspdf-autotable';
 
 export function downloadInvoice(order, isAdmin = false) {
-  console.log(order);
   const doc = new jsPDF();
 
   // --- HEADER ---
   doc.setFontSize(18);
-  doc.text('MyShop', 10, 15);
+  doc.text('MyShop', 10, 10);
   doc.setFontSize(11);
   doc.setTextColor(100);
-  doc.text('Invoice', 10, 28);
-  doc.text(`Order ID: #${order._id.slice(-6)}`, 10, 36);
-  doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 10, 44);
+  doc.text('Invoice', 10, 20);
+  doc.text(`Order ID: #${order._id.slice(-6)}`, 10, 26);
+  doc.text(`Date: ${dayjs(order.createdAt).format('DD/MM/YYYY')}`, 10, 32);
 
   // --- CUSTOMER INFO (Only for Admin) ---
   if (isAdmin) {
     doc.setFontSize(13);
     doc.setTextColor(0);
-    doc.text('Customer Details', 120, 60); // right column
+    doc.text('Customer Details', 165, 45); // right column
     doc.setFontSize(11);
     doc.setTextColor(80);
     doc.text(
       `${order.user.name}
-      ${order.user.email}`,
-      120,
-      68
+${order.user.email}`,
+      165,
+      52
     );
   }
 
   // --- SHIPPING INFO ---
   doc.setFontSize(13);
   doc.setTextColor(0);
-  doc.text('Shipping Address', 10, 60);
+  doc.text('Shipping Address', 10, 45);
   doc.setFontSize(11);
   doc.setTextColor(80);
   const address = order.shippingAddress;
   doc.text(
     `${address.fullName}
-    ${address.address}
-    ${address.city}, ${address.country} - ${address.postalCode}`,
+${address.address}
+${address.city}, ${address.country} - ${address.postalCode}`,
     10,
-    68
+    52
   );
 
   // --- PRODUCTS TABLE ---
@@ -57,7 +57,7 @@ export function downloadInvoice(order, isAdmin = false) {
   autoTable(doc, {
     head: [tableColumn],
     body: tableRows,
-    startY: 100,
+    startY: 70,
     theme: 'striped',
     styles: { fontSize: 11 },
     margin: { left: 10, right: 10 },
@@ -65,14 +65,14 @@ export function downloadInvoice(order, isAdmin = false) {
   });
 
   // --- ORDER SUMMARY ---
-  let finalY = doc.lastAutoTable.finalY + 20;
+  let finalY = doc.lastAutoTable.finalY + 15;
   doc.setFontSize(13);
   doc.setTextColor(0);
   doc.text('Order Summary', 10, finalY);
 
   doc.setFontSize(11);
   doc.setTextColor(80);
-  finalY += 10;
+  finalY += 8;
   doc.text(
     `Payment Status: ${
       order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)
