@@ -58,8 +58,8 @@ export default function Dashboard() {
             o._id,
             o.userName,
             `$${o.amount}`,
-            o.status,
-            new Date(o.createdAt).toLocaleDateString()
+            o.status
+            // new Date(o.createdAt).toLocaleDateString()
           ])}
         />
       </div>

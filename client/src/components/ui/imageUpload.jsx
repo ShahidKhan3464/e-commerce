@@ -1,6 +1,11 @@
 import React, { useRef } from 'react';
 
-export default function ImageUpload({ onChange, previewUrl, label = 'Image' }) {
+export default function ImageUpload({
+  error,
+  onChange,
+  previewUrl,
+  label = 'Image'
+}) {
   const fileInputRef = useRef(null);
 
   const handleClick = () => {
@@ -16,7 +21,7 @@ export default function ImageUpload({ onChange, previewUrl, label = 'Image' }) {
 
   return (
     <div className="flex flex-col">
-      <label className="mb-1 font-medium">{label}</label>
+      <label className="mb-1 text-sm font-medium">{label}</label>
       <div
         onClick={handleClick}
         className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition"
@@ -44,6 +49,7 @@ export default function ImageUpload({ onChange, previewUrl, label = 'Image' }) {
         ref={fileInputRef}
         onChange={handleFileChange}
       />
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
 }

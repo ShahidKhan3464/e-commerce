@@ -16,6 +16,10 @@ export default function Header() {
       return role === 'admin' ? 'Update Product' : 'Product Details';
     }
 
+    if (pathname.startsWith('/orders/view')) {
+      return 'Order Details';
+    }
+
     if (pathname.startsWith('/users/view')) {
       return role === 'admin' ? 'User Details' : 'User Details';
     }
@@ -57,7 +61,7 @@ export default function Header() {
             </button>
 
             {open && (
-              <div className="absolute right-0 mt-2 w-60 bg-white border border-solid border-gray-200 rounded shadow-lg z-10">
+              <div className="absolute right-0 mt-1 w-60 bg-white border border-solid border-gray-200 rounded shadow-lg z-10">
                 <div className="p-4 border-b border-gray-200">
                   <p className="font-semibold">{user.name}</p>
                   <p className="text-sm text-gray-500 truncate">{user.email}</p>

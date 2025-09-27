@@ -11,31 +11,51 @@ export default function ResetPasswordPage() {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get('token');
   const email = searchParams.get('email');
+  const [errors, setErrors] = useState({});
   const [password, setPassword] = useState('');
   const { resetPassword, loading } = useAuthStore();
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const validate = () => {
+    const newErrors = {};
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match!');
-      return;
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
+    if (!confirmPassword) {
+      newErrors.confirmPassword = 'Confirm password is required';
+    } else if (confirmPassword.length < 6) {
+      newErrors.confirmPassword =
+        'Confirm password must be at least 6 characters';
+    }
+
+    if (password && confirmPassword && password !== confirmPassword) {
+      newErrors.password = 'Passwords do not match';
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
     try {
       await resetPassword({ token, email, password, confirmPassword });
       toast.success('Password has been reset successfully!');
       nav('/login');
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Failed to reset password');
+      toast.error(err?.response?.data?.message || 'Something went wrong!');
     }
   };
 
   return (
     <div className="min-h-[calc(100vh_-_132px)] flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        {/* Title */}
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 my-2">
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">Reset Password</h2>
           <p className="text-gray-600 mt-2">
@@ -45,18 +65,20 @@ export default function ResetPasswordPage() {
 
         <form onSubmit={submit} className="space-y-5">
           <Input
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            label="New Password"
             type="password"
+            value={password}
+            label="New Password"
+            error={errors.password}
             placeholder="Enter a strong password"
+            onChange={(e) => setPassword(e.target.value)}
           />
           <Input
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            label="Confirm Password"
             type="password"
+            value={confirmPassword}
+            label="Confirm Password"
+            error={errors.confirmPassword}
             placeholder="Re-enter your password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <Button

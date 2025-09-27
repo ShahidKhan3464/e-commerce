@@ -27,10 +27,8 @@ const buildSort = (sortBy) => {
       return { price: 1 };
     case 'priceHighLow':
       return { price: -1 };
-    case 'newest':
-      return { createdAt: -1 };
     default:
-      return {};
+      return { createdAt: -1 };
   }
 };
 

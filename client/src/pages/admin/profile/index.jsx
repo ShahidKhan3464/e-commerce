@@ -8,6 +8,7 @@ import Button from '@/components/ui/button';
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
+  const [errors, setErrors] = useState({});
   const { loading, updateUser } = useUserStore();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,17 +17,36 @@ export default function ProfilePage() {
     email: user.email || ''
   });
 
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleEditToggle = () => {
+    setErrors({});
     setIsEditing((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     try {
       const updatedUser = await updateUser(user._id, formData);
       authStorage.setUser({
@@ -42,7 +62,7 @@ export default function ProfilePage() {
       setIsEditing(false);
       toast.success('Profile updated successfully!');
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Something went wrong');
+      toast.error(err?.response?.data?.message || 'Something went wrong!');
     }
   };
 
@@ -55,6 +75,7 @@ export default function ProfilePage() {
             <Input
               name="name"
               label="Name"
+              error={errors.name}
               value={formData.name}
               disabled={!isEditing}
               onChange={handleChange}
@@ -66,6 +87,7 @@ export default function ProfilePage() {
               type="email"
               name="email"
               label="Email"
+              error={errors.email}
               disabled={!isEditing}
               value={formData.email}
               onChange={handleChange}

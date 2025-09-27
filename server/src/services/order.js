@@ -15,7 +15,10 @@ export const createOrderService = async (orderData, res) => {
 export const getOrderByIdService = async (id, user, res) => {
   const order = await findOrderById(id);
   if (!order) return errorResponse(res, 'Order not found.', 404);
-  if (user.role !== 'admin' && order.user.toString() !== user._id.toString()) {
+  if (
+    user.role !== 'admin' &&
+    order.user._id.toString() !== user._id.toString()
+  ) {
     return errorResponse(
       res,
       'Unauthorized: You can only view your own orders',

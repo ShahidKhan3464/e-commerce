@@ -7,22 +7,36 @@ import Button from '@/components/ui/button';
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
   const { forgotPassword, loading } = useAuthStore();
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Enter a valid email address';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     try {
       await forgotPassword({ email });
       setSent(true);
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Failed to send reset email');
+      toast.error(err?.response?.data?.message || 'Something went wrong!');
     }
   };
 
   return (
     <div className="min-h-[calc(100vh_-_132px)] flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        {/* Title */}
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 my-2">
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">Forgot Password</h2>
           <p className="text-gray-600 mt-2">
@@ -38,11 +52,12 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={submit} className="space-y-5">
             <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              label="Email"
               type="email"
-              placeholder="you@domain.com"
+              value={email}
+              label="Email"
+              error={errors.email}
+              placeholder="Enter your email"
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <Button

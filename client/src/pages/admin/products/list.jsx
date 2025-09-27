@@ -8,6 +8,7 @@ import useProductStore from '@/store/product';
 import { useNavigate } from 'react-router-dom';
 import useDebounce from '@/hooks/use-debounce';
 import Pagination from '@/components/ui/pagination';
+import { handlePriceChange } from '@/utils/general';
 import usePaginationStore from '@/store/pagination';
 import ConfirmModal from '@/components/ui/confirmModal';
 
@@ -45,7 +46,11 @@ export default function ProductsPage() {
   const columns = [
     { key: 'name', title: 'Name', render: (r) => r.name },
     { key: 'price', title: 'Price', render: (r) => `$${r.price.toFixed(2)}` },
-    { key: 'category', title: 'Category', render: (r) => r.category },
+    {
+      key: 'category',
+      title: 'Category',
+      render: (r) => r.category.charAt(0).toUpperCase() + r.category.slice(1)
+    },
     {
       key: 'actions',
       title: 'Actions',
@@ -109,24 +114,26 @@ export default function ProductsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap justify-end gap-4 mb-6 items-end">
-        <Input
-          value={search}
-          placeholder="Search products..."
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <div className="flex gap-2">
+      <div className="flex flex-wrap justify-end gap-2 mb-6 items-end">
+        <div className="max-w-[180px] 2xl:max-w-[250px]">
+          <Input
+            value={search}
+            placeholder="Search products..."
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="flex gap-2 max-w-[200px] 2xl:max-w-[400px]">
           <Input
             type="number"
             value={minPrice}
             placeholder="Min"
-            onChange={(e) => setMinPrice(e.target.value)}
+            onChange={handlePriceChange(setMinPrice)}
           />
           <Input
             type="number"
             value={maxPrice}
             placeholder="Max"
-            onChange={(e) => setMaxPrice(e.target.value)}
+            onChange={handlePriceChange(setMaxPrice)}
           />
         </div>
         <Select

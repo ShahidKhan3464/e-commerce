@@ -91,7 +91,7 @@ export default function UsersPage() {
         onCancel={() => setModalOpen(false)}
         message={`Are you sure you want to delete the user?`}
       />
-      <div className="flex items-center justify-center gap-2 mb-6">
+      <div className="flex items-center justify-between gap-2 mb-6">
         <h1 className="text-2xl font-bold">Manage Users</h1>
         <Input
           value={search}

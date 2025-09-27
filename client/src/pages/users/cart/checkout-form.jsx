@@ -15,6 +15,7 @@ export default function CheckoutForm() {
   const elements = useElements();
   const { user } = useAuthStore();
   const { createOrder } = useOrderStore();
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const { cartItems, getTotals, clearCart } = useCartStore();
   const [shipping, setShipping] = useState({
@@ -30,9 +31,26 @@ export default function CheckoutForm() {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
   };
 
+  const validate = () => {
+    const newErrors = {};
+    if (!shipping.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!shipping.address.trim()) newErrors.address = 'Address is required';
+    if (!shipping.city.trim()) newErrors.city = 'City is required';
+    if (!shipping.country.trim()) newErrors.country = 'Country is required';
+    if (!shipping.postalCode.trim()) {
+      newErrors.postalCode = 'Postal code is required';
+    } else if (!/^[A-Za-z0-9\s-]{4,10}$/.test(shipping.postalCode)) {
+      newErrors.postalCode = 'Enter a valid postal code';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
+    if (!validate()) return;
 
     try {
       setLoading(true);
@@ -44,8 +62,13 @@ export default function CheckoutForm() {
       };
       const { clientSecret } = await paymentService.createPayment(payload);
 
-      // 2️⃣ Confirm card payment
       const cardElement = elements.getElement(CardElement);
+      if (!cardElement) {
+        toast.error('Please enter your card details');
+        setLoading(false);
+        return;
+      }
+
       const { paymentIntent, error } = await stripe.confirmCardPayment(
         clientSecret,
         {
@@ -85,7 +108,7 @@ export default function CheckoutForm() {
         }
       }
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Something went wrong');
+      toast.error(err?.response?.data?.message || 'Something went wrong!');
       setLoading(false);
     }
   };
@@ -94,39 +117,39 @@ export default function CheckoutForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-4">
         <Input
-          required
           name="fullName"
           placeholder="Full Name"
           onChange={handleChange}
+          error={errors.fullName}
           value={shipping.fullName}
         />
         <Input
-          required
           name="address"
+          error={errors.address}
           onChange={handleChange}
           value={shipping.address}
           placeholder="Street Address"
         />
         <div className="grid grid-cols-2 gap-2">
           <Input
-            required
             name="city"
             placeholder="City"
+            error={errors.city}
             value={shipping.city}
             onChange={handleChange}
           />
           <Input
-            required
             name="postalCode"
             onChange={handleChange}
             placeholder="Postal Code"
+            error={errors.postalCode}
             value={shipping.postalCode}
           />
         </div>
         <Input
-          required
           name="country"
           placeholder="Country"
+          error={errors.country}
           onChange={handleChange}
           value={shipping.country}
         />
