@@ -67,9 +67,9 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex flex-col justify-center min-h-[calc(100vh_-_188px)] max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
-      <div className="bg-white border border-solid border-gray-200 rounded-lg shadow p-6">
+    <div className="flex flex-col justify-center min-h-[calc(100vh_-_188px)] max-w-4xl mx-auto">
+      <div className="bg-white border border-solid border-gray-200 rounded-xl shadow p-6">
+        <h1 className="text-2xl font-bold mb-4">Profile</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <Input

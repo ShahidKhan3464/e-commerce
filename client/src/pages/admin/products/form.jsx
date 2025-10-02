@@ -84,62 +84,64 @@ export default function ProductForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-6">
-        {id ? 'Update Product' : 'Create Product'}
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          name="name"
-          label="Name"
-          value={form.name}
-          error={errors.name}
-          onChange={handleChange}
-          placeholder="Product Name"
-        />
-        <Input
-          name="price"
-          type="number"
-          label="Price"
-          value={form.price}
-          placeholder="Price"
-          error={errors.price}
-          onChange={handleChange}
-        />
-        <Select
-          name="category"
-          label="Category"
-          value={form.category}
-          error={errors.category}
-          onChange={handleChange}
-          placeholder="Select category"
-          options={[
-            { value: 'electronics', label: 'Electronics' },
-            { value: 'clothes', label: 'Clothes' },
-            { value: 'books', label: 'Books' }
-          ]}
-        />
-        <Input
-          name="description"
-          label="Description"
-          onChange={handleChange}
-          value={form.description}
-          placeholder="Description"
-        />
-        <ImageUpload
-          error={errors.image}
-          previewUrl={form.preview}
-          onChange={handleImageChange}
-        />
-        <Button
-          type="submit"
-          variant="primary"
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : id ? 'Update Product' : 'Create Product'}
-        </Button>
-      </form>
+    <div className="flex flex-col justify-center min-h-[calc(100vh_-_188px)] max-w-4xl mx-auto">
+      <div className="bg-white border border-solid border-gray-200 rounded-xl shadow p-6">
+        <h1 className="text-2xl font-bold mb-4">
+          {id ? 'Update Product' : 'Create Product'}
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            name="name"
+            label="Name"
+            value={form.name}
+            error={errors.name}
+            onChange={handleChange}
+            placeholder="Product Name"
+          />
+          <Input
+            name="price"
+            type="number"
+            label="Price"
+            value={form.price}
+            placeholder="Price"
+            error={errors.price}
+            onChange={handleChange}
+          />
+          <Select
+            name="category"
+            label="Category"
+            value={form.category}
+            error={errors.category}
+            onChange={handleChange}
+            placeholder="Select category"
+            options={[
+              { value: 'electronics', label: 'Electronics' },
+              { value: 'clothes', label: 'Clothes' },
+              { value: 'books', label: 'Books' }
+            ]}
+          />
+          <Input
+            name="description"
+            label="Description"
+            onChange={handleChange}
+            value={form.description}
+            placeholder="Description"
+          />
+          <ImageUpload
+            error={errors.image}
+            previewUrl={form.preview}
+            onChange={handleImageChange}
+          />
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : id ? 'Update Product' : 'Create Product'}
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
