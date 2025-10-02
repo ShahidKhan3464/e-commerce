@@ -22,8 +22,8 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh_-_188px)] max-w-5xl mx-auto">
-      <div className="bg-white border border-solid border-gray-200 rounded-lg shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="flex items-center justify-center min-h-[calc(100vh_-_188px)] max-w-4xl mx-auto">
+      <div className="bg-white border border-solid border-gray-200 rounded-xl shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-4">
           <img
             alt={product.name}

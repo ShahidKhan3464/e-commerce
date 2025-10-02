@@ -25,8 +25,8 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center min-h-[calc(100vh_-_188px)] max-w-5xl mx-auto">
-      <div className="bg-white border border-solid border-gray-200 rounded-lg shadow p-6 space-y-6">
+    <div className="flex flex-col justify-center min-h-[calc(100vh_-_188px)] max-w-4xl mx-auto">
+      <div className="bg-white border border-solid border-gray-200 rounded-xl shadow p-6 space-y-6">
         <div className="border-b pb-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">
             Order #{order._id.slice(-6)}
