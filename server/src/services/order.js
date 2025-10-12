@@ -1,4 +1,9 @@
 import { errorResponse, successResponse } from '../utils/apiResponse.js';
+import { sendEmail } from '../utils/sendMail.js';
+import {
+  orderConfirmationTemplate,
+  orderStatusUpdateTemplate
+} from '../emailTemplates/index.js';
 import {
   findOrders,
   countOrders,
@@ -9,6 +14,17 @@ import {
 
 export const createOrderService = async (orderData, res) => {
   const order = await createOrder(orderData);
+  try {
+    const populatedOrder = await findOrderById(order._id);
+    const user = populatedOrder.user;
+    const html = orderConfirmationTemplate(populatedOrder, user);
+    await sendEmail(
+      user.email,
+      'Order Confirmation - Thank You for Your Purchase!',
+      html
+    );
+  } catch (emailError) {}
+
   return successResponse(res, order, 'Successfully Created', 201);
 };
 
@@ -61,8 +77,26 @@ export const getAllOrdersService = async (filters = {}, user, res) => {
 };
 
 export const updateOrderStatusService = async (id, data, user, res) => {
-  await getOrderByIdService(id, user, res);
+  const existingOrder = await getOrderByIdService(id, user, res);
+  const previousStatus = existingOrder.orderStatus;
   const updatedOrder = await findOrderByIdAndUpdate(id, data);
+
+  if (data.orderStatus && data.orderStatus !== previousStatus) {
+    try {
+      const orderUser = updatedOrder.user;
+      const html = orderStatusUpdateTemplate(
+        updatedOrder,
+        orderUser,
+        previousStatus
+      );
+      await sendEmail(
+        orderUser.email,
+        `Order Status Update - ${data.orderStatus.toUpperCase()}`,
+        html
+      );
+    } catch (emailError) {}
+  }
+
   return successResponse(res, updatedOrder, 'Successfully Updated');
 };
 
