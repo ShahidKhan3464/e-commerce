@@ -1,7 +1,11 @@
 import User from '../models/user.js';
 
-const buildFilter = ({ search }) => {
-  const filter = { role: { $ne: 'admin' } };
+const buildFilter = ({ search, isAdmin }) => {
+  const filter = {};
+  
+  if (!isAdmin) {
+    filter.role = { $ne: 'admin' };
+  }
 
   if (search) {
     filter.$or = [

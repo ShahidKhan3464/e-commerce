@@ -24,7 +24,9 @@ export default function ProductCard({ product }) {
         <h2 className="text-lg font-semibold text-gray-800 truncate mb-2">
           {product.name}
         </h2>
-        <p className="text-blue-600 font-bold text-lg mb-4">${product.price}</p>
+        <p className="text-blue-600 font-bold text-lg mb-4">
+          ${product.price.toFixed(2)}
+        </p>
 
         <div className="mt-auto flex gap-2">
           <Button

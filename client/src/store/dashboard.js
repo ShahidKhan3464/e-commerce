@@ -1,23 +1,28 @@
 import { create } from 'zustand';
-import adminService from '@/services/admin';
+import dashboardService from '@/services/dashboard';
 
 const useDashboardStore = create((set) => ({
-  stats: { users: 0, orders: 0, products: 0, revenue: 0, monthlySales: [] },
-  latestOrders: [],
-  latestProducts: [],
+  loading: false,
+  userData: { metrics: {}, charts: {}, tables: {} },
+  adminData: { metrics: {}, charts: {}, tables: {} },
 
-  // For user dashboard
-  userOrders: [],
-
-  fetchDashboardData: async () => {}, // admin data
+  fetchAdminDashboard: async () => {
+    set({ loading: true });
+    try {
+      const response = await dashboardService.getAdminDashboard();
+      set({ adminData: response.data.data, loading: false });
+    } catch (error) {
+      set({ loading: false });
+    }
+  },
 
   fetchUserDashboard: async () => {
+    set({ loading: true });
     try {
-      // fetch orders of the logged-in user
-      const res = await adminService.getUserOrders(); // call backend API for user's orders
-      set({ userOrders: res });
+      const response = await dashboardService.getUserDashboard();
+      set({ userData: response.data.data, loading: false });
     } catch (error) {
-      console.error('User dashboard fetch error:', error);
+      set({ loading: false });
     }
   }
 }));
