@@ -128,7 +128,7 @@ export default function OrderDetailPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold">${item.price}</p>
+                  <p className="font-bold">${item.price.toFixed(2)}</p>
                   <p className="text-gray-500">Qty: {item.quantity}</p>
                 </div>
               </div>
@@ -142,7 +142,7 @@ export default function OrderDetailPage() {
           <div className="flex justify-between">
             <span className="text-gray-700">Total</span>
             <span className="text-2xl font-bold text-blue-600">
-              ${order.totalPrice}
+              ${order.totalPrice.toFixed(2)}
             </span>
           </div>
           <div className="mt-2 flex justify-between">

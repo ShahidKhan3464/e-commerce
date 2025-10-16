@@ -43,7 +43,7 @@ export default function ProductDetailPage() {
             </div>
             <div className="mt-6">
               <span className="text-4xl font-bold text-blue-600">
-                ${product.price}
+                ${product.price.toFixed(2)}
               </span>
             </div>
             <p className="mt-6 text-gray-700 leading-relaxed">

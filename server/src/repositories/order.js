@@ -44,5 +44,5 @@ export const findOrderByIdAndUpdate = async (id, data, options = {}) => {
     new: true,
     ...options,
     runValidators: true
-  });
+  }).populate('user');
 };

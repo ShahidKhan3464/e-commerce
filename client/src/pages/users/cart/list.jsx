@@ -33,7 +33,7 @@ export default function CartPage() {
                 />
                 <div className="ml-4 flex-1">
                   <h2 className="font-semibold text-lg">{item.name}</h2>
-                  <p className="text-gray-600">${item.price}</p>
+                  <p className="text-gray-600">${item.price.toFixed(2)}</p>
                   <div className="flex items-center mt-2">
                     <button
                       onClick={() =>

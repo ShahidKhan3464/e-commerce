@@ -10,6 +10,11 @@ body {
   @apply max-w-6xl mx-auto px-4;
 }
 
+.recharts-surface:focus,
+.recharts-sector:focus {
+  outline: none;
+}
+
 .is-card .OffsetContainer {
   display: none;
 }
