@@ -20,7 +20,7 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#06B6D4', '#84CC16'];
 
 export default function Dashboard() {
   const { userData, loading, fetchUserDashboard } = useDashboardStore();
@@ -98,87 +98,159 @@ export default function Dashboard() {
         />
         <Card title="Delivered Orders" value={metrics?.deliveredOrders || 0} />
       </div>
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Order Status</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-slate-800">Order Status</h2>
+          <div className="text-sm text-slate-500">Your Orders Overview</div>
+        </div>
         {hasStatusDistribution ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                cx="50%"
-                cy="50%"
-                dataKey="count"
-                innerRadius={60}
-                paddingAngle={1}
-                nameKey="status"
-                outerRadius={100}
-                data={charts.orderStatusDistribution}
-              >
-                {charts.orderStatusDistribution.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
+          <div className="flex flex-col lg:flex-row items-center gap-8">
+            <div className="flex-1">
+              <ResponsiveContainer width="100%" height={320}>
+                <PieChart>
+                  <Pie
+                    cx="50%"
+                    cy="50%"
+                    dataKey="count"
+                    innerRadius={70}
+                    paddingAngle={2}
+                    nameKey="status"
+                    outerRadius={120}
+                    data={charts.orderStatusDistribution}
+                  >
+                    {charts.orderStatusDistribution.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4 animate-scale-in">
+                            <p className="font-bold text-slate-800 capitalize mb-1">{data.status}</p>
+                            <p className="text-sm text-slate-600">
+                              Count: <span className="font-semibold">{data.count}</span>
+                            </p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
                   />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-col gap-3">
+              {charts.orderStatusDistribution.map((entry, index) => (
+                <div key={entry.status} className="flex items-center gap-3">
+                  <div 
+                    className="w-4 h-4 rounded-full" 
+                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                  ></div>
+                  <div className="flex-1">
+                    <p className="font-medium text-slate-700 capitalize">{entry.status}</p>
+                    <p className="text-sm text-slate-500">{entry.count} orders</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
-          <div className="text-center text-gray-500 py-10">
-            No records found
+          <div className="flex flex-col items-center justify-center h-64 text-slate-500 bg-slate-50 rounded-lg">
+            <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">
+              <span className="text-2xl">📊</span>
+            </div>
+            <p className="font-medium">No order data available</p>
+            <p className="text-sm">Your order statistics will appear here</p>
           </div>
         )}
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Monthly Spending</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-slate-800">Monthly Spending</h2>
+          <div className="flex items-center gap-2 text-sm text-slate-500">
+            <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full"></div>
+            <span>Spending Trend</span>
+          </div>
+        </div>
         {hasMonthlySpending ? (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={charts.monthlySpending}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip
-                content={({ active, payload, label }) => {
-                  if (active && payload && payload.length) {
-                    const spending = payload[0].value;
-                    const orders = payload[0].payload.orders;
-                    return (
-                      <div className="bg-white border border-gray-200 rounded-lg shadow p-3">
-                        <p className="font-semibold text-gray-800">{label}</p>
-                        <p className="text-sm text-gray-600">
-                          Spending:{' '}
-                          <span className="font-medium">
-                            ${spending.toFixed(2).toLocaleString()}
-                          </span>
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Orders: <span className="font-medium">{orders}</span>
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
-              />
-              <Line
-                type="monotone"
-                stroke="#4f46e5"
-                strokeWidth={2}
-                dataKey="spending"
-                dot={{ fill: '#4f46e5' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg p-4">
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart data={charts.monthlySpending} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis 
+                  stroke="#64748b"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      const spending = payload[0].value;
+                      const orders = payload[0].payload.orders;
+                      return (
+                        <div className="bg-white border border-slate-200 rounded-xl shadow-lg p-4 animate-scale-in">
+                          <p className="font-bold text-slate-800 mb-2">{label}</p>
+                          <div className="space-y-1">
+                            <p className="text-sm text-slate-600 flex items-center gap-2">
+                              <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                              Spending: <span className="font-semibold text-emerald-600">${spending.toFixed(2).toLocaleString()}</span>
+                            </p>
+                            <p className="text-sm text-slate-600 flex items-center gap-2">
+                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              Orders: <span className="font-semibold text-blue-600">{orders}</span>
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  stroke="url(#spendingGradient)"
+                  strokeWidth={3}
+                  dataKey="spending"
+                  dot={{ fill: '#10B981', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, fill: '#059669' }}
+                />
+                <defs>
+                  <linearGradient id="spendingGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#10B981" />
+                    <stop offset="100%" stopColor="#059669" />
+                  </linearGradient>
+                </defs>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
-          <div className="text-center text-gray-500 py-10">
-            No records found
+          <div className="flex flex-col items-center justify-center h-64 text-slate-500 bg-slate-50 rounded-lg">
+            <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mb-4">
+              <span className="text-2xl">💰</span>
+            </div>
+            <p className="font-medium">No spending data available</p>
+            <p className="text-sm">Your spending history will appear here</p>
           </div>
         )}
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <h2 className="text-xl font-bold text-slate-800 mb-6">Recent Orders</h2>
         <Table columns={columns} data={tables?.recentOrders || []} />
       </div>
     </div>

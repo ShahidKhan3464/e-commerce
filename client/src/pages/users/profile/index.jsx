@@ -118,9 +118,9 @@ export default function ProfilePage() {
               <React.Fragment>
                 <Button
                   type="button"
+                  variant="secondary"
                   disabled={loading}
                   onClick={handleEditToggle}
-                  className="!text-black !bg-gray-200 !hover:bg-gray-300"
                 >
                   Cancel
                 </Button>
